@@ -1,72 +1,178 @@
 <!DOCTYPE html>
-<html lang="en" class="">
+<html lang="id" class="">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Form Login dengan Tailwind CSS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Dark Mode with SVG & Effects</title>
   <link href="../dist/output.css" rel="stylesheet" />
+  <style>
+    .slider {
+      width: 3.5rem;  /* 56px */
+      height: 2rem;   /* 32px */
+      background-color: #d1d5db; /* gray-300 */
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    input:checked + .slider {
+      background-color: #3b82f6; /* blue-500 */
+    }
+    .slider::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 1.5rem; /* 24px */
+      height: 1.5rem;
+      background-color: white;
+      border-radius: 9999px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+      z-index: 10;
+    }
+    input:checked + .slider::before {
+      transform: translateX(1.5rem);
+    }
+
+    .icon-wrapper {
+      position: absolute;
+      top: 50%;
+      width: 1.25rem; /* 20px */
+      height: 1.25rem;
+      transform: translateY(-50%);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      fill: #fbbf24; /* yellow-400 */
+    }
+    .icon-moon {
+      left: 6px;
+      fill: #fbbf24; /* gold-ish */
+      opacity: 1;
+      transform-origin: center;
+    }
+    .icon-sun {
+      right: 6px;
+      fill: #f59e0b; /* darker gold */
+      opacity: 0;
+      transform-origin: center;
+      transform: scale(0.5) rotate(90deg);
+    }
+    input:checked ~ .icon-moon {
+      opacity: 0;
+      transform: scale(0.5) rotate(-90deg);
+    }
+    input:checked ~ .icon-sun {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    /* Shake animation */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    .shake {
+      animation: shake 0.3s ease;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen transition-colors duration-300">
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md">
+    <!-- Dark Mode Switch -->
+    <div class="flex justify-end mb-4 items-center gap-2">
+      <span id="modeLabel" class="text-sm font-medium text-gray-700 dark:text-gray-300">OFF</span>
+      <label class="relative inline-block cursor-pointer" aria-label="Toggle Dark Mode">
+        <input type="checkbox" id="darkModeToggle" class="sr-only" />
+        <div class="slider"></div>
 
-  <!-- Toggle Button -->
-  <button
-    id="darkModeToggle"
-    class="absolute top-4 right-4 bg-gray-300 dark:bg-gray-700 text-sm text-black dark:text-white px-4 py-2 rounded-md shadow"
-  >
-    Toggle Dark Mode
-  </button>
+        <!-- SVG Icon Bulan -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-wrapper icon-moon" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 0112.21 3 7 7 0 1012 21a9 9 0 009-8.21z"/>
+        </svg>
+        <!-- SVG Icon Matahari -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-wrapper icon-sun" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      </label>
+    </div>
 
-  <!-- Login Form -->
-  <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md transition-colors duration-300">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">Login</h2>
+    <!-- Login Form -->
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 transition-colors duration-300">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white text-center">Login</h2>
+      <form>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Email</label>
+          <input id="email" type="email" placeholder="email@example.com"
+            class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-700" />
+        </div>
+        <div class="mb-6">
+          <label for="password" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Password</label>
+          <input id="password" type="password" placeholder="********"
+            class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-700" />
+        </div>
+        <div class="mb-6 flex items-center">
+          <input id="remember" type="checkbox"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
+          <label for="remember" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">Ingat saya</label>
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="button"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-300">
+            Login
+          </button>
+        </div>
+        <div class="text-center mt-4">
+          <a href="#" class="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">Lupa
+            password?</a>
+        </div>
+      </form>
+    </div>
 
-    <form action="#" method="POST" class="space-y-6">
-      <div>
-        <label for="email" class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="you@example.com"
-          required
-          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div>
-        <label for="password" class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="••••••••"
-          required
-          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div class="flex items-center justify-between">
-        <label class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-          <input type="checkbox" class="mr-2 rounded" />
-          Remember me
-        </label>
-        <a href="#" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Forgot password?</a>
-      </div>
-
-      <button
-        type="submit"
-        class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-colors font-semibold"
-      >
-        Log In
-      </button>
-    </form>
+    <p class="text-center text-gray-600 dark:text-gray-400 text-sm">
+      Belum punya akun?
+      <a href="#" class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">Daftar disini</a>
+    </p>
   </div>
 
-  <!-- Script Toggle -->
+  <!-- Audio: Klik Lembut -->
+  <audio id="clickSound" preload="auto" src="https://actions.google.com/sounds/v1/buttons/button_press.wav"></audio>
+
   <script>
-    const toggleBtn = document.getElementById('darkModeToggle');
-    toggleBtn.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
+    const toggle = document.getElementById('darkModeToggle');
+    const modeLabel = document.getElementById('modeLabel');
+    const clickSound = document.getElementById('clickSound');
+    const slider = toggle.nextElementSibling;
+
+    // Load preferensi dark mode
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.documentElement.classList.add('dark');
+      toggle.checked = true;
+      modeLabel.textContent = 'ON';
+    } else {
+      modeLabel.textContent = 'OFF';
+    }
+
+    toggle.addEventListener('change', () => {
+      // Putar suara klik lembut
+      clickSound.currentTime = 0;
+      clickSound.play();
+
+      // Tambah efek shake/vibrate sebentar
+      slider.classList.add('shake');
+      setTimeout(() => slider.classList.remove('shake'), 300);
+
+      if (toggle.checked) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('darkMode', 'enabled');
+        modeLabel.textContent = 'ON';
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('darkMode', 'disabled');
+        modeLabel.textContent = 'OFF';
+      }
     });
   </script>
 </body>
